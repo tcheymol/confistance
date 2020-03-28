@@ -3,10 +3,16 @@
 {% block title %}Hello DashboardController!{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="col-12">
-            <div class="row">
+<div class="container">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-6">
                 <h1 class="text-white">Toutes les parties</h1>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <a class="mr-3 mt-2 ml-auto btn btn-primary" href="{{ url('create_game') }}">Créer une partie</a>
+                </div>
             </div>
         </div>
 
@@ -14,18 +20,35 @@
             <div class="col-12 card ">
                 <div class="col-12 card-body">
                     <div class="row">
-                        <h3>{{ game.name }}</h3>
-                        <span class="ml-auto">Créateur : {{ game.creator }}</span>
+                        <div class="col-4">
+                            <h3>{{ game.name }}</h3>
+                        </div>
+                        <div class="col-2">
+                            <span class="ml-auto">Créateur : {{ game.creator }}</span>
+                        </div>
+                        <div class="col-6">
+                            {% if not game.isOver %}
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="ml-auto badge badge-success">En cours</span>
+                                    </div>
+                                    <a class="ml-auto btn btn-success"
+                                       href="{{ url('join_game', {'id': game.id}) }}">
+                                        Rejoindre la
+                                        partie</a>
+                                </div>
+                            {% else %}
+                                <span class="badge badge-error">Terminée</span>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="row">
-                        {% for spot in game.participants %}
+                    <hr/>
+                    <div class="row d-flex justify-content-around">
+                        {% for spot in game.participants|sort((a, b) => a.spotIndex > b.spotIndex) %}
                             {% if spot.appUser is null %}
                                 <div class="card border-success m-1">
                                     <div class="card-body">
                                         <span>Place libre</span>
-                                        <br/>
-                                        <a href="{{ url('join_game', {'id': game.id}) }}">Prendre la
-                                            place</a>
                                     </div>
                                 </div>
                             {% else %}
@@ -37,21 +60,9 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    {% if not game.isOver %}
-                        <span class="badge badge-success">En cours</span>
-                        <div class="row">
-                            <a class="ml-auto btn btn-outline-success"
-                               href="{{ url('join_game', {'id': game.id}) }}">
-                                Rejoindre la
-                                partie</a>
-                        </div>
-                    {% else %}
-                        <span class="badge badge-error">Terminée</span>
-                    {% endif %}
                 </div>
             </div>
         {% endfor %}
 
-        <a class="btn btn-primary mt-4" href="{{ url('create_game') }}">Créer une partie</a>
     </div>
-{% endblock %}
+    {% endblock %}
