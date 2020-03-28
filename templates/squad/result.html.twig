@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Partie{% endblock %}
+
+{% block body %}
+    <div class="container p-5">
+        <h1><u>Résultats de l'escouade:</u></h1>
+        <span class="badge badge-light">{{ squad.spotsCount }} Places</span>
+        {% include 'squad/status.html.twig' with {'squad': squad} %}
+        <div class="row mt-3">
+            {% for squadMember in squad.squadMembers %}
+                <div class="col-4 p-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="row">
+                                    <span>{{ squadMember.member }}</span>
+                                    {% if squadMember.spyPlayed is not null %}
+                                        <span class="ml-auto badge badge-success">Carte jouée</span>
+                                    {% else %}
+                                        <span class="ml-auto badge badge-warning">En attente</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 p-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mt-4">
+                            {% for result in results %}
+                                <div class="col-4 mt-4">
+                                    {% if result == true %}
+                                        <div
+                                                class="col-12 btn btn-primary d-flex flex-column justify-content-center"
+                                                style="min-height: 200px">
+                                            <span>Espion</span>
+                                        </div>
+                                    {% else %}
+                                        <div
+                                                class="col-12 btn btn-danger d-flex flex-column justify-content-center"
+                                                style="min-height: 200px">
+                                            <span>Résistant</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 p-6">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="{{ url('game', {'id': squad.game.id}) }}" class="btn btn-primary">Retourner à la
+                            partie</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

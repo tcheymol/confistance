@@ -1,0 +1,7 @@
+{% if squad.status == 'STATUS_PLAYED' %}
+    {% if squad.success == true %}
+        <span class="ml-auto badge badge-success">Mission réussie</span>
+    {% else %}
+        <span class="ml-auto badge badge-danger">Mission échouée</span>
+    {% endif %}
+{% endif %}

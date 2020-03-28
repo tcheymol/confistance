@@ -1,0 +1,9 @@
+{% if squad.squadIndex ==  squad.game.indexNextSquad %}
+    <span class="badge badge-warning">En cours</span>
+{% else %}
+    {% if squad.status == 'STATUS_CREATED' %}
+        <span class="badge badge-primary">À jouer</span>
+    {% elseif squad.status == 'STATUS_PLAYED' %}
+        {% include 'squad/success.html.twig' with {'squad': squad} %}
+    {% endif %}
+{% endif %}

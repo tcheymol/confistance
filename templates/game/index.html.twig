@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Partie{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1><u>Partie :</u> {{ game.name }}</h1>
+        <div class="row mt-3">
+            <div class="card col-4">
+                <div class="card-body">
+                    <span>Créateur : {{ game.creator }}</span>
+                    <br/>
+                    {% if not game.isOver %}
+                        <span class="badge badge-success">En cours</span>
+                    {% else %}
+                        <span class="badge badge-error">Terminée</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card col-4">
+                <div class="card-body">
+                    <span>Votre status : </span>
+                    {% if not currentUserParticipant %}
+                        <span class="badge badge-error">Vous n'avez pas rejoint cette partie</span>
+                    {% else %}
+                        {% if currentUserParticipant.isSpy %}
+                            <span class="badge badge-primary">ESPION</span>
+                        {% else %}
+                            <span class="badge badge-danger">RÉSISTANT</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card col-4">
+                <div class="card-body">
+                    {% if not game.isStarted and app.user == game.creator %}
+                        <a href="{{ url('start_game', {'id': game.id}) }}" class="btn btn-success">Commencer la
+                            partie</a>
+                    {% endif %}
+                    <br/>
+                    {% if game.currentPlayer is not null and not game.isOver %}
+                        {% if app.user == game.currentPlayer.appUser %}
+                            <span>C'est à vous de choisir la prochaine escouade</span>
+                        {% else %}
+                            <span>Joueur qui choisit l'escouade pour la prochaine escouade : {{ game.currentPlayer.appUser }}</span>
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="card p-4 col-12">
+                <h2>Joueurs</h2>
+                <div class="row">
+                    {% for participant in game.participants %}
+                        <div class="col-2 ">
+                            {% if participant.appUser is null %}
+                                {% if participant.spotIndex == game.indexNextPlayer %}
+                                    <span class="badge bagge-info">
+                                            👑
+                                        </span>
+                                {% endif %}
+                                <span class="btn btn-outline-success">
+                                        Libre
+                                    </span>
+                            {% else %}
+                                {% if participant.spotIndex == game.indexNextPlayer %}
+                                    <span class="disabled btn btn-info">
+                                         👑{{ participant.appUser }}
+                                    </span>
+                                {% else %}
+                                    <span class=" disabled btn btn-outline-info">
+                                         {{ participant.appUser }}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="card p-4 col-12">
+                <h2>Escouades</h2>
+                <div class="row">
+                    {% for key, squad in game.squads|sort((a, b) => a.squadIndex > b.squadIndex) %}
+                        <div class="col-2 ">
+                            <span class="badge badge-light">{{ squad.spotsCount }} Places</span>
+                            {% include 'squad/status.html.twig' with {'squad' : squad} %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% if game.getCurrentSquad is not null %}
+            <div class="row mt-4">
+                <div class="card p-4 col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Prochaine escouade</h2>
+                            <span class="ml-auto">{{ game.getCurrentSquad.spotsCount - game.getCurrentSquad.getSquadMembers | length }} Places restantes </span>
+                            <span class="ml-1"> /  {{ game.getCurrentSquad.spotsCount }} Places</span>
+                        </div>
+                    </div>
+                    {% for message in app.flashes('current-squad') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <div class="row">
+                        {% for member in game.participants %}
+                            {% if member.appUser is not null %}
+                                <div class="col-4 p-3">
+                                    {% if game.currentPlayer is not null and game.currentPlayer.appUser == app.user %}
+                                        <a
+                                                href="{{ url('squad_select_member', {'id': game.getCurrentSquad.id, 'participant_id' : member.id}) }}"
+                                                class="col-12 d-flex justify-content-center align-items-center btn {% if member.appUser.id in game.getCurrentSquad.getSquadMembersId %}btn-primary{% else %}btn-outline-primary{% endif %}"
+                                                style="min-height: 100px">
+                                        <span>
+                                            {{ member.appUser }}
+                                        </span>
+                                        </a>
+                                    {% else %}
+                                        <div class="disabled col-12 d-flex justify-content-center align-items-center btn {% if member.appUser.id in game.getCurrentSquad.getSquadMembersId %}btn-primary{% else %}btn-outline-primary{% endif %}"
+                                             style="min-height: 100px">
+                                        <span>
+                                            {{ member.appUser }}
+                                        </span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            {% if game.getCurrentSquad.status == 'STATUS_PLAYING' %}
+                                <a href="{{ url('squad', {'id': game.getCurrentSquad.id}) }}"
+                                   class="btn btn-success text-white ml-auto">Voir l'escouade en cours</a>
+                            {% else %}
+                                {% if game.currentPlayer is not null and game.currentPlayer.appUser == app.user %}
+                                    <a href="{{ url('refuse_squad', {'id': game.getCurrentSquad.id}) }}"
+                                       class="btn btn-danger ml-auto">Escouade refusée par l'équipe</a>
+                                    <a href="{{ url('start_squad', {'id': game.getCurrentSquad.id}) }}"
+                                       class="btn btn-success text-white ml-auto">Lancer l'escouade</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

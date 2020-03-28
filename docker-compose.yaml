@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    database:
+        image: postgres:11-alpine
+        environment:
+            POSTGRES_USER: resistance
+            POSTGRES_PASSWORD: resistance
+            POSTGRES_DB: resistance
+        ports: [5432]

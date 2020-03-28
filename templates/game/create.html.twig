@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une partie !{% endblock %}
+
+{% block body %}
+    <div class="container pt-5">
+        <div class="example-wrapper">
+            <h1>Créer une partie</h1>
+
+            {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.numberOfParticipants) }}
+            <button type="submit" class="btn btn-lg btn-primary mt-4">Créer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

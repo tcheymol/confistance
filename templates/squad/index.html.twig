@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Partie{% endblock %}
+
+{% block body %}
+    <div class="container p-5">
+        <h1><u>Escouade en cours:</u></h1>
+        <span class="badge badge-light">{{ squad.spotsCount }} Places</span>
+        {% include 'squad/status.html.twig' with {'squad': squad} %}
+        <div class="row mt-3">
+            {% for squadMember in squad.squadMembers %}
+                <div class="col-4 p-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="row">
+                                    <span>{{ squadMember.member }}</span>
+                                    {% if squadMember.spyPlayed is not null %}
+                                        <span class="ml-auto badge badge-success">Carte jouée</span>
+                                    {% else %}
+                                        <span class="ml-auto badge badge-warning">En attente</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 p-6">
+                <div class="card">
+                    <div class="card-body">
+                        {% if userSquadMember is not null %}
+                            <h2>Vous faites partie de cette escouade</h2>
+                            <div class="row mt-4">
+                                {% if userSquadMember.spyPlayed is null %}
+                                    <div class="col-6">
+                                        <a href="{{ url('play_spy', {'id': userSquadMember.id}) }}"
+                                           class="col-12 btn btn-outline-primary d-flex flex-column justify-content-center"
+                                           style="min-height: 200px">
+                                            <span>Jouer espion</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{{ url('play_resistant', {'id': userSquadMember.id}) }}"
+                                           class="col-12 btn btn-outline-danger d-flex flex-column justify-content-center"
+                                           style="min-height: 200px">
+                                            <span>Jouer résistant</span>
+                                        </a>
+                                    </div>
+                                {% elseif userSquadMember.spyPlayed == false %}
+                                    <div class="col-12">
+                                        <div class="col-12 bg-danger d-flex flex-column justify-content-center"
+                                             style="min-height: 200px">
+                                            <span class="text-white">Vous avez joué résistant</span>
+                                        </div>
+                                    </div>
+                                {% elseif userSquadMember.spyPlayed == true %}
+                                    <div class="col-12">
+                                        <div class="col-12 bg-primary d-flex flex-column justify-content-center align-items-center"
+                                             style="min-height: 200px">
+                                            <span class="text-white">Vous avez joué espion</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <h2>Vous ne faites pas partie de cette escouade</h2>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 p-6">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="{{ url('game', {'id': squad.game.id}) }}" class="btn btn-primary">Retourner à la
+                            partie</a>
+                        {% if squad.played %}
+                            <a href="{{ url('squad_result', {'id': squad.id}) }}" class="btn btn-primary">Voir le
+                                résultat</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
