@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\SignupType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -26,6 +31,30 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
+
+    /**
+     * @Route("/signup", name="app_signup", methods={"POST", "GET"})
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
+     */
+    public function signup(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(SignupType::class, null, ['action' => $this->generateUrl('app_signup')]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $user = new User();
+            $user->setEmail($data['email']);
+            $user->setUsername($data['username']);
+            $user->setPassword($encoder->encodePassword($user, $data['password']));
+            $em->persist($user);
+            $em->flush();
+            return $this->redirect($this->generateUrl('app_login'));
+        }
+
+        return $this->render('security/signup.html.twig', ['form' => $form->createView()]);
     }
 
     /**

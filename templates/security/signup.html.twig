@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign up!{% endblock %}
+
+{% block body %}
+    <div class="container p-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="h3 mt-2 mb-3 font-weight-normal">Please create an account</h1>
+                {{ form_start(form) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.username) }}
+                {{ form_row(form.password) }}
+                <button class="col-12 btn btn-lg btn-primary mt-3" type="submit">
+                    Sign in
+                </button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

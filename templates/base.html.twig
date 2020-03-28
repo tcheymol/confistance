@@ -10,8 +10,18 @@
 </head>
 <body>
 {% if app.user is not null %}
-    <span>{{ app.user }}</span>
-    <a href="{{ url('app_logout') }}">Logout</a>
+    <div class="navbar navbar-light bg-light">
+        <div>
+            <i class="fas fa-user"></i>
+            <span>{{ app.user }}</span>
+        </div>
+        <div>
+            <a class="text-danger" href="{{ url('app_logout') }}">
+                Logout
+                <i class="text-danger fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </div>
 {% endif %}
 {% block body %}
 {% endblock %}

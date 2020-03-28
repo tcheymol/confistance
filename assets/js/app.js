@@ -12,7 +12,7 @@ import "@popperjs/core"
 import "bootstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
 // any CSS you import will output into a single css file (app.css in this case)
-import '../css/app.css';
+import '../css/app.scss';
 
 $(document).ready(function () {
     $('.select2').select2();
