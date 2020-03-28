@@ -25,6 +25,12 @@
                     {% else %}
                         {% if currentUserParticipant.isSpy %}
                             <span class="badge badge-primary">ESPION</span>
+                            Les autres espions sont :
+                            {% for participant in game.participants %}
+                                {% if participant.spy %}
+                                    <span>{{ participant.appUser }}</span>
+                                {% endif %}
+                            {% endfor %}
                         {% else %}
                             <span class="badge badge-danger">RÉSISTANT</span>
                         {% endif %}
