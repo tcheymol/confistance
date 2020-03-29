@@ -185,8 +185,10 @@ class Squad
         return $this->status === self::STATUS_PLAYED;
     }
 
-    public function isSuccess(): bool
+    public function isSuccess(): ?bool
     {
+        if ($this->status !== self::STATUS_PLAYED) return null;
+
         $isSuccess = true;
         foreach ($this->squadMembers as $squadMember) {
             if ($squadMember !== null && $squadMember->getSpyPlayed() === true) {
@@ -226,6 +228,4 @@ class Squad
 
         return $randomizedResults;
     }
-
-
 }

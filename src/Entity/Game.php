@@ -316,4 +316,42 @@ class Game
         return $this;
     }
 
+    public function isGameFinished()
+    {
+        $successesCount = 0;
+        $failuresCount = 0;
+        foreach ($this->squads as $squad) {
+            if ($squad->isSuccess() === true) {
+                $successesCount += 1;
+            } elseif ($squad->isSuccess() === false) {
+                $failuresCount += 1;
+            }
+        }
+
+        return $failuresCount >= 3 || $successesCount >= 3;
+    }
+
+    public function isWon()
+    {
+        $successesCount = 0;
+        foreach ($this->squads as $squad) {
+            if ($squad->isSuccess() === true) {
+                $successesCount += 1;
+            }
+        }
+
+        return $successesCount >= 3;
+    }
+
+    public function isLost()
+    {
+        $failuresCount = 0;
+        foreach ($this->squads as $squad) {
+            if ($squad->isSuccess() === false) {
+                $failuresCount += 1;
+            }
+        }
+
+        return $failuresCount >= 3;
+    }
 }

@@ -9,8 +9,10 @@
             <div class="ml-auto text-white">
                 {% if not game.isOver %}
                     <span class="badge badge-success">En cours</span>
-                {% else %}
-                    <span class="badge badge-error">Terminée</span>
+                {% elseif game.won %}
+                    <span class="badge badge-danger">Terminée gagnée par Résistants</span>
+                {% elseif game.lost %}
+                    <span class="badge badge-primary">Terminée gagnée par Espions</span>
                 {% endif %}
                 <span class="badge badge-info">Créateur : {{ game.creator }}</span>
                 {% if not game.isStarted and app.user == game.creator %}

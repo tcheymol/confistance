@@ -39,8 +39,10 @@
                                                 Rejoindre la
                                                 partie</a>
                                         </div>
-                                    {% else %}
-                                        <span class="badge badge-error">Terminée</span>
+                                    {% elseif game.won %}
+                                        <span class="badge badge-danger">Terminée gagnée par Résistants</span>
+                                    {% elseif game.lost %}
+                                        <span class="badge badge-primary">Terminée gagnée par Espions</span>
                                     {% endif %}
                                 </div>
                             </div>

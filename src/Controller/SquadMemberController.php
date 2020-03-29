@@ -29,8 +29,9 @@ class SquadMemberController extends AbstractController
         }
         if ($isSquadPlayed) {
             $squad->setStatus(Squad::STATUS_PLAYED);
+            $isGameOver = $squad->getGame()->getIndexNextSquad() + 1 === $squad->getGame()->getSquads()->count() || $squad->getGame()->isGameFinished();
 
-            if ($squad->getGame()->getIndexNextSquad() + 1 === $squad->getGame()->getSquads()->count()) {
+            if ($isGameOver) {
                 $squad->getGame()->setIsOver(true);
                 $squad->getGame()->setIndexNextSquad(-1);
             } else {
