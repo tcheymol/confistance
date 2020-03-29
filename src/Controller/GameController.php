@@ -141,6 +141,29 @@ class GameController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/leave", name="leave_game", methods={"GET"})
+     * @param Game                   $game
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse
+     */
+    public function leave(Game $game, EntityManagerInterface $em, Security $security)
+    {
+        $user = $security->getUser();
+        $userGameParticipants = $game->getParticipants()->filter(function (GameParticipant $participant) use ($user) {
+            return $participant->getAppUser() === $user;
+        });
+
+        $userParticipant = $userGameParticipants->first();
+        if ($userParticipant !== false) {
+            $userParticipant->setAppUser(null);
+        }
+
+        $em->flush();
+
+        return new RedirectResponse($this->generateUrl('dashboard'));
+    }
+
+    /**
      * @Route("/next-squad/{id}", name="game_next_squad", methods={"GET"})
      * @param Game $game
      * @return RedirectResponse

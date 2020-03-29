@@ -22,16 +22,17 @@
             <div class="col-4">
                 <div class="card col-12">
                     <div class="card-body">
-                        <span>Votre status : </span>
+                        <span>Vous êtes </span>
                         {% if not currentUserParticipant %}
                             <span class="badge badge-error">Vous n'avez pas rejoint cette partie</span>
                         {% else %}
                             {% if currentUserParticipant.isSpy %}
                                 <span class="badge badge-primary">ESPION</span>
+                                <br/>
                                 Les autres espions sont :
                                 {% for participant in game.participants %}
-                                    {% if participant.spy %}
-                                        <span>{{ participant.appUser }}</span>
+                                    {% if participant.spy and participant != currentUserParticipant %}
+                                        <span>{{ participant.appUser }}, </span>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
@@ -45,9 +46,12 @@
                 <div class="card col-12">
                     <div class="card-body">
                         {% if not game.isStarted and app.user == game.creator %}
-                            <a href="{{ url('start_game', {'id': game.id}) }}" class="btn btn-success">Commencer la
+                            <a href="{{ url('start_squad', {'id': game.id}) }}" class="btn btn-success">Commencer la
                                 partie</a>
+                            <br/>
                         {% endif %}
+                        <a href="{{ url('leave_game', {'id': game.id}) }}" class="btn btn-danger">Quitter la
+                            partie</a>
                         <br/>
                         {% if game.currentPlayer is not null and not game.isOver %}
                             {% if app.user == game.currentPlayer.appUser %}
@@ -144,8 +148,8 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="col-12">
-                        <div class="row">
+                    <div class="row">
+                        <div class="ml-auto">
                             {% if game.getCurrentSquad.status == 'STATUS_PLAYING' %}
                                 <a href="{{ url('squad', {'id': game.getCurrentSquad.id}) }}"
                                    class="btn btn-success text-white ml-auto">Voir l'escouade en cours</a>
