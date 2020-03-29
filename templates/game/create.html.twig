@@ -4,14 +4,16 @@
 
 {% block body %}
     <div class="container pt-5">
-        <div class="example-wrapper">
-            <h1>Créer une partie</h1>
+        <div class="card">
+            <div class="card-body">
+                <h1>Créer une partie</h1>
 
-            {{ form_start(form) }}
-            {{ form_row(form.name) }}
-            {{ form_row(form.numberOfParticipants) }}
-            <button type="submit" class="btn btn-lg btn-primary mt-4">Créer</button>
-            {{ form_end(form) }}
+                {{ form_start(form) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.numberOfParticipants) }}
+                <button type="submit" class="btn btn-lg btn-primary mt-4">Créer</button>
+                {{ form_end(form) }}
+            </div>
         </div>
     </div>
 {% endblock %}

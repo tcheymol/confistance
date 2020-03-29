@@ -3,7 +3,7 @@
 {% block title %}Partie{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container p-4">
         <h1 class="text-white"><u>Partie :</u> {{ game.name }}</h1>
         <div class="row mt-3">
             <div class="col-4">
@@ -167,4 +167,12 @@
             </div>
         {% endif %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        setTimeout(function () {
+            window.location.reload();
+        }, 5000);
+    </script>
 {% endblock %}

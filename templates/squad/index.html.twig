@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Partie{% endblock %}
+{% block title %}Escouade{% endblock %}
 
 {% block body %}
     <div class="container p-5">
-        <h1><u>Escouade en cours:</u></h1>
+        <h1 class="text-white mb-4"><u>Escouade en cours:</u></h1>
         <span class="badge badge-light">{{ squad.spotsCount }} Places</span>
         {% include 'squad/status.html.twig' with {'squad': squad} %}
         <div class="row mt-3">
@@ -87,4 +87,12 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        setTimeout(function () {
+            window.location.reload();
+        }, 5000);
+    </script>
 {% endblock %}

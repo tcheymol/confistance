@@ -19,7 +19,7 @@ class SecurityController extends AbstractController
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
@@ -30,12 +30,16 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        $email = $request->get('email');
+
+        return $this->render('security/login.html.twig', ['last_username' => $email !== null ? $email : $lastUsername, 'error' => $error]);
     }
 
     /**
      * @Route("/signup", name="app_signup", methods={"POST", "GET"})
-     * @param AuthenticationUtils $authenticationUtils
+     * @param Request                      $request
+     * @param UserPasswordEncoderInterface $encoder
+     * @param EntityManagerInterface       $em
      * @return Response
      */
     public function signup(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em): Response
@@ -51,7 +55,7 @@ class SecurityController extends AbstractController
             $user->setPassword($encoder->encodePassword($user, $data['password']));
             $em->persist($user);
             $em->flush();
-            return $this->redirect($this->generateUrl('app_login'));
+            return $this->redirect($this->generateUrl('app_login', ['email' => $data['email']]));
         }
 
         return $this->render('security/signup.html.twig', ['form' => $form->createView()]);
