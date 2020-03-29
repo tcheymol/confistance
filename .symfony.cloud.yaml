@@ -3,7 +3,7 @@ name: app
 type: php:7.4
 
 relationships:
-    database: "resistance:postgresql"
+    database: "db:postgresql"
 
 runtime:
     extensions:
