@@ -1,4 +1,4 @@
-db:
+resistance:
     type: postgresql:11
     disk: 1024
     size: S
