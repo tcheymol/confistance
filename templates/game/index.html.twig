@@ -148,21 +148,23 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="row">
-                        <div class="ml-auto">
-                            {% if game.getCurrentSquad.status == 'STATUS_PLAYING' %}
-                                <a href="{{ url('squad', {'id': game.getCurrentSquad.id}) }}"
-                                   class="btn btn-success text-white ml-auto">Voir l'escouade en cours</a>
-                            {% else %}
-                                {% if game.currentPlayer is not null and game.currentPlayer.appUser == app.user %}
-                                    <a href="{{ url('refuse_squad', {'id': game.getCurrentSquad.id}) }}"
-                                       class="btn btn-danger ml-auto">Escouade refusée par l'équipe</a>
-                                    <a href="{{ url('start_squad', {'id': game.getCurrentSquad.id}) }}"
-                                       class="btn btn-success text-white ml-auto">Lancer l'escouade</a>
+                    {% if game.getCurrentSquad.spotsCount == game.getCurrentSquad.getSquadMembers | length %}
+                        <div class="row">
+                            <div class="ml-auto">
+                                {% if game.getCurrentSquad.status == 'STATUS_PLAYING' %}
+                                    <a href="{{ url('squad', {'id': game.getCurrentSquad.id}) }}"
+                                       class="btn btn-success text-white ml-auto">Voir l'escouade en cours</a>
+                                {% else %}
+                                    {% if game.currentPlayer is not null and game.currentPlayer.appUser == app.user %}
+                                        <a href="{{ url('refuse_squad', {'id': game.getCurrentSquad.id}) }}"
+                                           class="btn btn-danger ml-auto">Escouade refusée par l'équipe</a>
+                                        <a href="{{ url('start_squad', {'id': game.getCurrentSquad.id}) }}"
+                                           class="btn btn-success text-white ml-auto">Lancer l'escouade</a>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}
