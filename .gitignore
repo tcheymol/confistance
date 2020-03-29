@@ -9,6 +9,7 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
