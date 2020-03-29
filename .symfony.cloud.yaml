@@ -12,7 +12,7 @@ runtime:
         - pdo_pgsql
 
 relationships:
-    database: "db:postgresql"
+    database: "resistance:postgresql"
 
 build:
     flavor: none
