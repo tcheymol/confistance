@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use function array_filter;
 use function array_key_exists;
 use function array_pop;
@@ -67,6 +68,11 @@ class Game
 
     /**
      * @var integer
+     * @Assert\Range(
+     *      min = 5,
+     *      max = 10,
+     *      notInRangeMessage = "Vous devez avoir entre 5 et 10 joueurs"
+     * )
      */
     private $numberOfParticipants;
 
