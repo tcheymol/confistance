@@ -22,3 +22,7 @@ $('.result-card-back').click((event) => {
     const truc = $(event.target).closest('.result-card-back');
     truc.hide();
 });
+
+$('.show-participant-status').click(() => {
+    $('.participant-status').toggle();
+});

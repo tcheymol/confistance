@@ -4,65 +4,50 @@
 
 {% block body %}
     <div class="container-md p-4">
-        <h1 class="text-white"><u>Partie :</u> {{ game.name }}</h1>
-        <div class="row mt-3">
-            <div class="col-12 col-md-4 ">
-                <div class="card">
-                    <div class="card-body">
-                        <span>Créateur : {{ game.creator }}</span>
-                        <br/>
-                        {% if not game.isOver %}
-                            <span class="badge badge-success">En cours</span>
-                        {% else %}
-                            <span class="badge badge-error">Terminée</span>
-                        {% endif %}
-                    </div>
+        <div class="row mt-4">
+            <h1 class="text-white"><u>Partie :</u> {{ game.name }}</h1>
+            <div class="ml-auto text-white">
+                {% if not game.isOver %}
+                    <span class="badge badge-success">En cours</span>
+                {% else %}
+                    <span class="badge badge-error">Terminée</span>
+                {% endif %}
+                <span class="badge badge-info">Créateur : {{ game.creator }}</span>
+                {% if not game.isStarted and app.user == game.creator %}
+                    <a href="{{ url('start_game', {'id': game.id}) }}" class="btn btn-success">Commencer la
+                        partie</a>
+                {% endif %}
+                {% if not game.isStarted %}
+                    <a href="{{ url('leave_game', {'id': game.id}) }}" class="btn btn-danger ml-auto">Quitter la
+                        partie</a>
+                {% endif %}
+
+                <div class="btn btn-primary show-participant-status">
+                    Afficher votre status
                 </div>
             </div>
-            <div class="col-12 col-md-4  mt-2">
-                <div class="card">
-                    <div class="card-body">
+        </div>
+
+        <div class="row mt-4 participant-status" style="display: none">
+            {% if not currentUserParticipant %}
+                <div class="col-12 alert alert-danger">Vous n'avez pas rejoint cette partie</div>
+            {% else %}
+                {% if currentUserParticipant.isSpy %}
+                    <div class="col-12 alert alert-primary">
                         <span>Vous êtes </span>
-                        {% if not currentUserParticipant %}
-                            <span class="badge badge-error">Vous n'avez pas rejoint cette partie</span>
-                        {% else %}
-                            {% if currentUserParticipant.isSpy %}
-                                <span class="badge badge-primary">ESPION</span>
-                                <br/>
-                                Les autres espions sont :
-                                {% for participant in game.participants %}
-                                    {% if participant.spy and participant != currentUserParticipant %}
-                                        <span>{{ participant.appUser }}, </span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                <span class="badge badge-danger">RÉSISTANT</span>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 mt-2">
-                <div class="card">
-                    <div class="card-body">
-                        {% if not game.isStarted and app.user == game.creator %}
-                            <a href="{{ url('start_squad', {'id': game.id}) }}" class="btn btn-success">Commencer la
-                                partie</a>
-                            <br/>
-                        {% endif %}
-                        <a href="{{ url('leave_game', {'id': game.id}) }}" class="btn btn-danger">Quitter la
-                            partie</a>
+                        ESPION
                         <br/>
-                        {% if game.currentPlayer is not null and not game.isOver %}
-                            {% if app.user == game.currentPlayer.appUser %}
-                                <span>C'est à vous de choisir la prochaine escouade</span>
-                            {% else %}
-                                <span>Joueur qui choisit l'escouade pour la prochaine escouade : {{ game.currentPlayer.appUser }}</span>
+                        Les autres espions sont :
+                        {% for participant in game.participants %}
+                            {% if participant.spy and participant != currentUserParticipant %}
+                                <span>{{ participant.appUser }}, </span>
                             {% endif %}
-                        {% endif %}
+                        {% endfor %}
                     </div>
-                </div>
-            </div>
+                {% else %}
+                    <div class="col-12 alert alert-danger"><span>Vous êtes </span> RÉSISTANT</div>
+                {% endif %}
+            {% endif %}
         </div>
         <div class="row mt-4">
             <div class="card p-4 col-12">
@@ -80,7 +65,7 @@
                                         Libre
                                     </span>
                             {% else %}
-                                {% if participant.spotIndex == game.indexNextPlayer %}
+                                {% if game.indexNextPlayer is not null and participant.spotIndex == game.indexNextPlayer %}
                                     <span class="disabled btn btn-info">
                                          👑{{ participant.appUser }}
                                     </span>
@@ -111,13 +96,22 @@
         {% if game.getCurrentSquad is not null %}
             <div class="row mt-4">
                 <div class="card p-4 col-12">
-                    <div class="row">
-                        <div class="col-12">
-                            <h2>Prochaine escouade</h2>
-                            <span class="ml-auto">{{ game.getCurrentSquad.spotsCount - game.getCurrentSquad.getSquadMembers | length }} Places restantes </span>
-                            <span class="ml-1"> /  {{ game.getCurrentSquad.spotsCount }} Places</span>
-                        </div>
+                    <div class="row pl-3">
+                        <h2>Prochaine escouade</h2>
+                        <span class="ml-auto">{{ game.getCurrentSquad.spotsCount - game.getCurrentSquad.getSquadMembers | length }} Places restantes </span>
+                        <span class="ml-1 mr-3"> /  {{ game.getCurrentSquad.spotsCount }} Places</span>
                     </div>
+                    {% if game.currentPlayer is not null and not game.isOver %}
+                        {% if app.user == game.currentPlayer.appUser %}
+                            <div class="row alert alert-success ml-1 mr-1">
+                                <span>C'est à vous de choisir la prochaine escouade</span>
+                            </div>
+                        {% else %}
+                            <div class="row alert alert-warning ml-1 mr-1">
+                                <span>Joueur qui choisit l'escouade pour la prochaine escouade : {{ game.currentPlayer.appUser }}</span>
+                            </div>
+                        {% endif %}
+                    {% endif %}
                     {% for message in app.flashes('current-squad') %}
                         <div class="alert alert-danger">
                             {{ message }}
@@ -172,6 +166,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript">
         setTimeout(function () {
             window.location.reload();
