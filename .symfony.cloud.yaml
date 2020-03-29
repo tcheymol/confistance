@@ -2,17 +2,17 @@ name: app
 
 type: php:7.4
 
+relationships:
+    database: "resistance:postgresql"
+
 runtime:
     extensions:
+        - pdo_pgsql
         - apcu
         - mbstring
         - sodium
         - ctype
         - iconv
-        - pdo_pgsql
-
-relationships:
-    database: "resistance:postgresql"
 
 build:
     flavor: none
