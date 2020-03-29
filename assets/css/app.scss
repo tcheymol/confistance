@@ -3,3 +3,26 @@
 body {
   background-image: url("../img/bacckground.jpg");
 }
+
+.result-card {
+  position: relative;
+}
+
+.result-card-back {
+  position: absolute;
+  height: calc(100% + 2px);
+  width: calc(100% + 2px);
+  top: -1px;
+  left: -1px;
+  background: #8e44ad;
+  border: 1px solid #34495e;
+  border-radius: 4px;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.result-card-back i {
+  font-size: 40px;
+}

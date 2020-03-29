@@ -17,3 +17,8 @@ import '../css/app.scss';
 $(document).ready(function () {
     $('.select2').select2();
 });
+
+$('.result-card-back').click((event) => {
+    const truc = $(event.target).closest('.result-card-back');
+    truc.hide();
+});
