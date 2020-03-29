@@ -90,8 +90,8 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript">
-        {{ parent() }}
         setTimeout(function () {
             window.location.reload();
         }, 5000);

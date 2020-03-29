@@ -103,12 +103,16 @@ class SquadController extends AbstractController
 
     /**
      * @Route("/{id}", name="squad", methods={"GET"})
-     * @param Squad                  $squad
-     * @param EntityManagerInterface $em
+     * @param Squad    $squad
+     * @param Security $security
      * @return Response
      */
-    public function index(Squad $squad, EntityManagerInterface $em, Security $security)
+    public function index(Squad $squad, Security $security)
     {
+        if ($squad->getSquadIndex() !== $squad->getGame()->getIndexNextSquad()) {
+            return $this->redirect($this->generateUrl('squad_result', ['id' => $squad->getId()]));
+        }
+
         return $this->render('squad/index.html.twig', [
             'squad' => $squad,
             'userSquadMember' => $squad->getUserSquadMember($security->getUser()),

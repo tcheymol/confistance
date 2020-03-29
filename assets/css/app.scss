@@ -38,3 +38,15 @@ body {
   background-image: url("../img/villain.png");
   background-size: cover;
 }
+
+.mini-card {
+  height: 40px;
+  width: 20px;
+  border-radius: 2px;
+}
+
+.squad-card {
+  background-color: rgba(149, 165, 166, 0.3);
+  border-radius: 4px;
+  height: 100%;
+}

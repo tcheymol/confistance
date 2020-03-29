@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use function array_rand;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SquadRepository")
@@ -206,6 +207,24 @@ class Squad
         $this->squadIndex = $squadIndex;
 
         return $this;
+    }
+
+
+    public function getResults(): array
+    {
+        $randomizedResults = [];
+        $orderedResults = $this->getSquadMembers()->map(function (SquadMember $member) {
+            return $member->getSpyPlayed();
+        });
+        $resultsCount = $orderedResults->count();
+
+        for ($i = 0; $i < $resultsCount; $i++) {
+            $randomIndex = array_rand($orderedResults->toArray());
+            $randomizedResults[] = $orderedResults[$randomIndex];
+            unset($orderedResults[$randomIndex]);
+        }
+
+        return $randomizedResults;
     }
 
 
