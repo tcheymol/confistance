@@ -22,4 +22,12 @@ body {
 .result-card-back i {
   font-size: 40px; }
 
+.play-resistant {
+  background-image: url("../img/girl.png");
+  background-size: cover; }
+
+.play-spy {
+  background-image: url("../img/villain.png");
+  background-size: cover; }
+
 /*# sourceMappingURL=app.css.map */

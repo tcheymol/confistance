@@ -3,7 +3,7 @@
 {% block title %}Escouade{% endblock %}
 
 {% block body %}
-    <div class="container p-5">
+    <div class="container-md p-5">
         <h1 class="text-white mb-4"><u>Escouade en cours:</u></h1>
         <span class="badge badge-light">{{ squad.spotsCount }} Places</span>
         {% include 'squad/status.html.twig' with {'squad': squad} %}
@@ -37,14 +37,14 @@
                                 {% if userSquadMember.spyPlayed is null %}
                                     <div class="col-6">
                                         <a href="{{ url('play_spy', {'id': userSquadMember.id}) }}"
-                                           class="col-12 btn btn-outline-primary d-flex flex-column justify-content-center"
+                                           class="text-white  col-12 btn btn-outline-primary d-flex flex-column justify-content-start play-spy"
                                            style="min-height: 200px">
                                             <span>Jouer espion</span>
                                         </a>
                                     </div>
                                     <div class="col-6">
                                         <a href="{{ url('play_resistant', {'id': userSquadMember.id}) }}"
-                                           class="col-12 btn btn-outline-danger d-flex flex-column justify-content-center"
+                                           class="text-white col-12 btn btn-outline-danger d-flex flex-column justify-content-start play-resistant"
                                            style="min-height: 200px">
                                             <span>Jouer résistant</span>
                                         </a>
