@@ -18,7 +18,7 @@
     "@popperjs/core": "^2.1.1",
     "add": "^2.0.6",
     "bootstrap": "^4.4.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "node-sass": "^4.13.1",
     "popper.js": "^1.16.1",
     "sass-loader": "^7.3.1",
